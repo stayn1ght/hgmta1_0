@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,15 @@ WSGI_APPLICATION = 'hgmta1_0.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'gmdb1_0',
+        'NAME': 'hgmta1_0',
+        'USER': 'root',
+        'PASSWORD': 'root123456',
+        # 'PASSWORD': 'lamroot123',
+        'HOST': "localhost",
+        'PORT': '3306',
+        'OPTIONS': {'isolation_level':None}
     }
 }
 
