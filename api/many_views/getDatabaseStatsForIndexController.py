@@ -41,10 +41,19 @@ def get_genera_number():
     sql = """
         # 统计 fungi 和 bacteria 的数量放到一个 sql 里面
         SELECT
-            COUNT(CASE WHEN taxa LIKE '%k__Bacteria%' AND taxa LIKE '%|g__%' THEN 1 END) AS bacteria_count,
-            COUNT(CASE WHEN taxa LIKE '%k__fungi%' AND taxa LIKE '%|g__%' THEN 1 END) AS fungi_count
+            COUNT(CASE WHEN 
+                t1.taxa LIKE '%k__Bacteria%' 
+                AND t1.taxa LIKE '%|g__%' 
+                AND t1.taxa NOT LIKE '%|s__%'
+            THEN 1 END) AS bacteria_count,
+            COUNT(CASE WHEN 
+                t1.taxa LIKE '%k__fungi%' 
+                AND t1.taxa LIKE '%|g__%' 
+                AND t1.taxa NOT LIKE '%|s__%' 
+            THEN 1 END) AS fungi_count
         FROM
-            feature_table;
+            (SELECT DISTINCT taxa FROM feature_table) as t1
+            ;
         """
     with connection.cursor() as cursor:
         cursor.execute(sql)

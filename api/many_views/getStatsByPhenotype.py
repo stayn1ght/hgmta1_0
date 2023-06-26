@@ -60,7 +60,7 @@ def get_run_summary_by_phenotype(mesh_id):
 def get_all_data_of_phenotype_comparison(mesh_id):
     sql = """
         SELECT 
-            da_id as project_id, taxon_level as taxon_rank_level, lfc as LDA, assay_type as experiment_type,
+            batch as project_id, taxon_level as taxon_rank_level, lfc as LDA, assay_type as experiment_type,
             display as nrproj, taxa_short_name as scientific_name, display as conflict
         FROM da_results
         LEFT JOIN disease_info on disease_info.phenotype_name = da_results.case_name
