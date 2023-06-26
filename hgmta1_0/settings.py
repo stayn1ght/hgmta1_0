@@ -82,10 +82,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': 'gmdb1_0',
-        'NAME': 'hgmta1_0',
+        'NAME': 'hgmta1_1',
         'USER': 'root',
+        # 'PASSWORD': 'abc',
         'PASSWORD': 'root123456',
-        # 'PASSWORD': 'lamroot123',
         'HOST': "localhost",
         'PORT': '3306',
         'OPTIONS': {'isolation_level':None}

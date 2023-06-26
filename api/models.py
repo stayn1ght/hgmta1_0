@@ -101,6 +101,10 @@ class SampleMetaCurated(models.Model):
     bodysite = models.CharField(max_length=100, null=False)
     batch = models.CharField(max_length=100, null=False)
     batch2 = models.CharField(max_length=100, null=False)
+    QC_state = models.CharField(max_length=100, null=False)
+    QC_Bacteria = models.CharField(max_length=100, null=False)
+    QC_Bacteria_gg = models.CharField(max_length=100, null=False)
+    QC_Fungi = models.CharField(max_length=100, null=False)
 
     class Meta:
         db_table = "sample_meta_curated"

@@ -56,7 +56,7 @@ LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (project_id,batch,summary,associated_project);
 
-LOAD DATA INFILE 'D:/07-data/HGMTA/sample_meta_all_curated.csv'
+LOAD DATA INFILE 'D:/07-data/HGMTA/sample_meta_all_QC.csv'
 INTO TABLE sample_meta_curated
 COLUMNS TERMINATED BY ','
 ENCLOSED BY '"'
@@ -64,4 +64,5 @@ LINES TERMINATED BY '\n'
 IGNORE 1 ROWS
 (project_id,run_id ,sample_name,assay_type ,sequencing_method ,phenotype_name ,
 sample_description ,phenotype_id ,country ,geographic_location , longitude ,lattitude ,
-age ,sex ,bmi ,antibiotic_use ,antibiotic_name ,bodysite ,batch ,batch2);
+age ,sex ,bmi ,antibiotic_use ,antibiotic_name ,bodysite ,batch ,batch2,QC_state,QC_Bacteria,QC_Bacteria_gg,QC_Fungi
+);

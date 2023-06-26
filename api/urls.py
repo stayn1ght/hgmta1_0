@@ -12,5 +12,11 @@ urlpatterns = [
 
     path('getProjectSummaryForBarplot/', views.getProjectSummaryForBarplot),
     path('getRunSummaryForBarplot/', views.getRunSummaryForBarplot),
+
+    path('getTumorTypeToID/', views.getTumorTypeToID),
+
+    path('getPhenotypeComparisons/', views.getPhenotypeComparisons),
     
+    path('getProjectsandRuns/', views.getProjectsandRuns),
+    path('getAllRunsAsync/', views.getAllRunsAsync),
 ]
