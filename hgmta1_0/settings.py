@@ -127,7 +127,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+# 这个配置的影响可以在浏览器的源代码处看文件结构
+STATIC_URL = 'hgmt/static/'
 
 
 
