@@ -20,7 +20,7 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hgmta/api/', include('api.urls')),
+    path('hgmt/api/', include('api.urls')),
     path('hgmt/', TemplateView.as_view(template_name='index.html')),
     # 此时 只有 localhost:8000/hgmt/ 才会进入 vue 的 index.html
     # localhost:8000/hgmt/xxx 会报错
