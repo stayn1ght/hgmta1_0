@@ -45,18 +45,11 @@ class DAResults(models.Model):
     num_control = models.IntegerField(null=False)
     taxa_short_name = models.CharField(max_length=100, null=False)
     display = models.BooleanField(null=False)
+    nrproj = models.IntegerField(null=False)
+    conflict = models.IntegerField(null=False)
 
     class Meta:
         db_table = "da_results"
-
-class FeatureTable(models.Model):
-    taxa = models.CharField(max_length=500, null=False)
-    run_id = models.CharField(max_length=100, null=False)
-    abundance = models.FloatField(null=False)
-    # abundance 以 100 为基准
-
-    class Meta:
-        db_table = "feature_table"
 
 class ProjectAll(models.Model):
     project_id = models.CharField(max_length=100, null=False)
@@ -109,3 +102,39 @@ class SampleMetaCurated(models.Model):
     class Meta:
         db_table = "sample_meta_curated"
 
+class Searchable(models.Model):
+    type = models.CharField(max_length=100, null=False)
+    keywords = models.CharField(max_length=100, null=False)
+    accession = models.CharField(max_length=100, null=False)
+
+    class Meta:
+        db_table = "searchable"
+
+class taxa2ncbi(models.Model):
+    hgmt_micro_id = models.CharField(max_length=100, null=False)
+    level = models.CharField(max_length=100, null=False)
+    taxa = models.CharField(max_length=300, null=False)
+    short_name = models.CharField(max_length=100, null=False)
+    taxid = models.CharField(max_length=100, null=False)
+    scientific_name = models.CharField(max_length=300, null=False)
+
+    class Meta:
+        db_table = "taxa2ncbi"
+
+class FeatureTableFungi(models.Model):
+    taxa = models.CharField(max_length=500, null=False)
+    run_id = models.CharField(max_length=100, null=False)
+    abundance = models.FloatField(null=False)
+    # abundance 以 100 为基准
+
+    class Meta:
+        db_table = "feature_table_fungi"
+
+class FeatureTableBac(models.Model):
+    taxa = models.CharField(max_length=500, null=False)
+    run_id = models.CharField(max_length=100, null=False)
+    abundance = models.FloatField(null=False)
+    # abundance 以 100 为基准
+
+    class Meta:
+        db_table = "feature_table_bac"

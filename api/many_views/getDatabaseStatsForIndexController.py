@@ -52,8 +52,7 @@ def get_genera_number():
                 AND t1.taxa NOT LIKE '%|s__%' 
             THEN 1 END) AS fungi_count
         FROM
-            (SELECT DISTINCT taxa FROM feature_table) as t1
-            ;
+            (SELECT DISTINCT taxa FROM feature_table) as t1;
         """
     with connection.cursor() as cursor:
         cursor.execute(sql)

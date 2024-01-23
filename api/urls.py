@@ -19,4 +19,24 @@ urlpatterns = [
     
     path('getProjectsandRuns/', views.getProjectsandRuns),
     path('getAllRunsAsync/', views.getAllRunsAsync),
+
+    path('getProjectDetailsByID/', views.getProjectDetailsByID),
+    path('getAllRunsByProjectIDAsync/', views.getAllRunsByProjectIDAsync),
+
+    path('getProjectSummaryByDisease/', views.getProjectSummaryByDisease),
+
+    path('getDaResultsByDisease/', views.getDaResultsByDisease),
+
+    path('searchable/', views.searchable),
+
+    path('getDataByProjectID/', views.getDataByProjectID),
+    path('getFeatureTableByProjectID/', views.getFeatureTableByProjectID),
+    path('getMarkerTaxaByDAID/', views.getMarkerTaxaByDAID),
+
+    path('getPhenotypeID2Name/', views.getPhenotypeID2Name),
+
+    # help 页面下载数据的api
+    path('getFeatureTable/', views.getFeatureTable),
+    path('getDaResults/', views.getDaResults),
+    path('getTaxa2NCBI/', views.getTaxa2NCBI),
 ]
