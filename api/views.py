@@ -20,18 +20,19 @@ def getDatabaseStatsForIndexController(request):
         tumor_types = get_tumor_types()
         if tumor_types is not None:
             res["tumor_types"] = tumor_types
-        
+
         projects = get_projects_number()
         if projects is not None:
             res["projects"] = projects
+        
         
         runs = get_runs_number()
         if runs is not None:
             res["runs"] = runs
         
-        genera = get_genera_number()
+        """ genera = get_genera_number()
         if genera is not None:
-            res["genera"] = genera
+            res["genera"] = genera """
         
         return JsonResponse(res)
     else:
@@ -328,6 +329,51 @@ def getDataByProjectID(request):
         except:
             return JsonResponse({"code": "1002", "msg": "data access error"})
 
+def getMetadataAllRuns(request):
+    """
+    获取所有runs的metadata 
+      """
+    if request.method == "POST":
+        sql = """
+        select * from sample_meta_curated;
+        """
+    with connection.cursor() as cursor:
+            cursor.execute(sql)
+            res = dict_fetchall(cursor)
+    if res is not None:
+        return HttpResponse(json.dumps(res), content_type="application/json")
+
+def getProjectFeatureTable(request):
+    """ 
+     为 data/_id 页面提供 feature table 数据, 分别提供 bacteria 和 fungi 的丰度表
+    """
+    if request.method == "POST":
+        if request.body:
+            data = json.loads(request.body)
+            project_id = data.get("project_id", "")
+            kingdom = data.get("kingdom", "")
+            if kingdom == "bacteria":
+                sql = """
+                    SELECT ftb.* 
+                    FROM feature_table_bac ftb 
+                    INNER JOIN sample_meta_curated smc ON ftb.run_id = smc.run_id 
+                    WHERE smc.project_id = %s 
+                    AND (ftb.taxa LIKE '%%|g__%%' OR ftb.taxa LIKE '%%|s__%%');
+                """
+            elif kingdom == "fungi":
+                sql = """
+                    SELECT ftb.* 
+                    FROM feature_table_fungi ftb 
+                    INNER JOIN sample_meta_curated smc ON ftb.run_id = smc.run_id 
+                    WHERE smc.project_id = %s
+                    AND (ftb.taxa LIKE '%%|g__%%' OR ftb.taxa LIKE '%%|s__%%');
+                """
+            with connection.cursor() as cursor:
+                cursor.execute(sql, [ project_id ])
+                res = dict_fetchall(cursor)
+            if res is not None:
+                return HttpResponse(json.dumps(res), content_type="application/json")
+
 def getFeatureTableByProjectID(request):
     """
     是对上述 getDataByProjectID 的一个补充,
@@ -424,7 +470,8 @@ def getDaResults(request):
         
 def getTaxa2NCBI(request):
     """
-    提供给help页面下载taxa2ncbi表格
+    提供给 project id 页面下载 taxa2ncbi 表格
+    提供给 help 页面下载taxa2ncbi表格
     """
     if request.method == "POST":
         sql="""

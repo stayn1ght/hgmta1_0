@@ -35,8 +35,13 @@ urlpatterns = [
 
     path('getPhenotypeID2Name/', views.getPhenotypeID2Name),
 
+    # data 页面下载 metadata of all runs
+    path("getMetadataAllRuns/", views.getMetadataAllRuns),
+    # data id 页面下载feature table
+    path('getProjectFeatureTable/', views.getProjectFeatureTable),
     # help 页面下载数据的api
     path('getFeatureTable/', views.getFeatureTable),
     path('getDaResults/', views.getDaResults),
     path('getTaxa2NCBI/', views.getTaxa2NCBI),
+
 ]

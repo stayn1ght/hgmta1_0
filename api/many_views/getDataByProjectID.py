@@ -42,6 +42,7 @@ def getStatsByProjectID(project_id):
     # get nr valid runs, runs with bac, runs with fungi
     sql2="""
         SELECT
+            count(*) AS total_run_count,
             SUM(CASE WHEN QC_state = 1 THEN 1 ELSE 0 END) AS valid_run_count,
             SUM(CASE WHEN QC_Bacteria = 1 THEN 1 ELSE 0 END) AS run_with_bac,
             SUM(CASE WHEN QC_Fungi = 1 THEN 1 ELSE 0 END) AS run_with_fungi
@@ -50,28 +51,24 @@ def getStatsByProjectID(project_id):
     # get DA stats
     """ ??? taxa from ??? batchs """
     sql3="""
-        SELECT s.project_id, s.batch, 
-        r.da_id, r.marker_count, r.assay_type,
-        sum(r.marker_count) OVER (PARTITION BY s.project_id) AS total_marker_count,
-        p.control_run_count, p.case_run_count
+        SELECT s.project_id, s.batch,
+            r.da_id, r.marker_count, r.assay_type, r.case_name, r.control_name,
+            sum(case when s.phenotype_name = r.case_name then 1 else 0 end) as case_run_count,
+            sum(case when s.phenotype_name = r.control_name then 1 else 0 end) as control_run_count,
+            sum(r.marker_count) OVER (PARTITION BY s.project_id) AS total_marker_count
         FROM (
-            SELECT DISTINCT project_id, batch2 AS batch
+            SELECT DISTINCT project_id, batch2 AS batch, phenotype_name, run_id
             FROM sample_meta_curated
             WHERE project_id = %s
+            # WHERE project_id = "PRJDB4176"
         ) AS s
         INNER JOIN (
-            SELECT da_id, batch, assay_type, 
+            SELECT da_id, batch, assay_type, case_name, control_name,
             COUNT(*) AS marker_count
             FROM da_results
-            GROUP BY da_id, batch, assay_type
+            GROUP BY da_id, batch, assay_type, case_name, control_name
         ) AS r ON s.batch = r.batch
-        INNER JOIN (
-            select batch2 as batch,
-            sum(case when phenotype_id = "D006262" then 1 else 0 end) as control_run_count,
-            sum(case when phenotype_id != "D006262" then 1 else 0 end) as case_run_count
-            from sample_meta_curated
-            group by batch2
-        ) as p on s.batch = p.batch;
+        GROUP BY s.project_id, s.batch,r.da_id, r.marker_count, r.assay_type, r.case_name, r.control_name;
     """
     stats = {}
     with connection.cursor() as cursor:
