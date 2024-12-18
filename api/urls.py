@@ -35,6 +35,7 @@ urlpatterns = [
 
     path('getPhenotypeID2Name/', views.getPhenotypeID2Name),
 
+    path('getTumorRank/', views.getTumorRank),
     # data 页面下载 metadata of all runs
     path("getMetadataAllRuns/", views.getMetadataAllRuns),
     # data id 页面下载feature table

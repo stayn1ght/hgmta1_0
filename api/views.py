@@ -368,6 +368,16 @@ def getProjectFeatureTable(request):
                     WHERE smc.project_id = %s
                     AND (ftb.taxa LIKE '%%|g__%%' OR ftb.taxa LIKE '%%|s__%%');
                 """
+            elif kingdom == "ko":
+                sql = """
+                    SELECT ftb.* 
+                    FROM feature_table_kos ftb
+                    WHERE ftb.run_id IN (
+                        SELECT run_id
+                        FROM sample_meta_curated
+                        WHERE project_id = %s
+                    );
+                """
             with connection.cursor() as cursor:
                 cursor.execute(sql, [ project_id ])
                 res = dict_fetchall(cursor)
@@ -444,9 +454,11 @@ def getFeatureTable(request):
     if request.method == "POST":
         sql="""
             # 合并 bac 和 fungi 的 feature table。bac和fungi的feature table的列名是一样的
-            select * from feature_table_bac
+            (select * from feature_table_bac limit 100)
             union all
-            select * from feature_table_fungi limit 200;
+            (select * from feature_table_fungi limit 100)
+            union all
+            (select id, ko as taxa, run_id, abundance from feature_table_kos limit 100);
         """
         with connection.cursor() as cursor:
             cursor.execute(sql)
@@ -482,3 +494,23 @@ def getTaxa2NCBI(request):
             res = dict_fetchall(cursor)
         if res is not None:
             return HttpResponse(json.dumps(res), content_type="application/json")
+
+def getTumorRank(request):
+    """ 
+    for explore page tumor rank bar-plot
+    """
+    if request.method == "POST":
+        sql1 = """
+            select * from gmtd;
+        """
+        sql2 = """
+            select * from gmtp;
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql1)
+            res1 = dict_fetchall(cursor)
+            cursor.execute(sql2)
+            res2 = dict_fetchall(cursor)
+        if res1 is not None and res2 is not None:
+            return JsonResponse({"gmtd": res1, "gmtp": res2})
+    

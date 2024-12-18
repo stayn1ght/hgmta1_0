@@ -69,7 +69,7 @@ def get_all_data_of_phenotype_comparison(mesh_id):
             lfc as LDA,
             assay_type as experiment_type,
             display,
-            taxa_short_name as scientific_name,
+            scientific_short_name as scientific_name,
             nrproj,
             conflict,
             case

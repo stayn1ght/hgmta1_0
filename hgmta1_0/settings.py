@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'hgmta1_1',
         'USER': 'root',
         # 'PASSWORD': 'abc',
-        'PASSWORD': 'root123456',
+        'PASSWORD': 'root114514',
         'HOST': "localhost",
         'PORT': '3306',
         'OPTIONS': {'isolation_level':None}

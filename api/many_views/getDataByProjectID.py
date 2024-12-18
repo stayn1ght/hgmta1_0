@@ -14,6 +14,16 @@ def getFeatureTableByProjectID(batch_id, kingdom):
             INNER JOIN sample_meta_curated s ON f.run_id = s.run_id
             WHERE s.batch = %s;
         """
+    elif kingdom == "ko":
+                sql = """
+                    SELECT ftb.* 
+                    FROM feature_table_kos ftb
+                    WHERE ftb.run_id IN (
+                        SELECT run_id
+                        FROM sample_meta_curated
+                        WHERE project_id = %s
+                    );
+                """
     with connection.cursor() as cursor:
         cursor.execute(sql, [ batch_id ])
         feature = dict_fetchall(cursor)
@@ -43,9 +53,10 @@ def getStatsByProjectID(project_id):
     sql2="""
         SELECT
             count(*) AS total_run_count,
-            SUM(CASE WHEN QC_state = 1 THEN 1 ELSE 0 END) AS valid_run_count,
+            SUM(CASE WHEN QC_state = 1 THEN 1  ELSE 0 END) AS valid_run_count,
             SUM(CASE WHEN QC_Bacteria = 1 THEN 1 ELSE 0 END) AS run_with_bac,
-            SUM(CASE WHEN QC_Fungi = 1 THEN 1 ELSE 0 END) AS run_with_fungi
+            SUM(CASE WHEN QC_Fungi = 1 THEN 1 ELSE 0 END) AS run_with_fungi,
+            SUM(CASE WHEN QC_KOs = 1 THEN 1 ELSE 0 END) AS run_with_kos
         FROM sample_meta_curated WHERE project_id = %s;
     """
     # get DA stats
@@ -60,7 +71,6 @@ def getStatsByProjectID(project_id):
             SELECT DISTINCT project_id, batch2 AS batch, phenotype_name, run_id
             FROM sample_meta_curated
             WHERE project_id = %s
-            # WHERE project_id = "PRJDB4176"
         ) AS s
         INNER JOIN (
             SELECT da_id, batch, assay_type, case_name, control_name,

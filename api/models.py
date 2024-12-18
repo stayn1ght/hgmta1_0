@@ -45,6 +45,9 @@ class DAResults(models.Model):
     num_control = models.IntegerField(null=False)
     taxa_short_name = models.CharField(max_length=100, null=False)
     display = models.BooleanField(null=False)
+    taxon_id = models.CharField(max_length=15, null=False)
+    scientific_name = models.CharField(max_length=300, null=False)
+    scientific_short_name = models.CharField(max_length=100, null=False)
     nrproj = models.IntegerField(null=False)
     conflict = models.IntegerField(null=False)
 
@@ -80,7 +83,7 @@ class SampleMetaCurated(models.Model):
     assay_type = models.CharField(max_length=100, null=False)
     sequencing_method = models.CharField(max_length=100, null=False)
     phenotype_name = models.CharField(max_length=100, null=False)
-    sample_description = models.CharField(max_length=100, null=False)
+    sample_description = models.CharField(max_length=200, null=False)
     phenotype_id = models.CharField(max_length=100, null=False)
     country = models.CharField(max_length=100, null=False)
     geographic_location = models.CharField(max_length=100, null=False)
@@ -96,7 +99,7 @@ class SampleMetaCurated(models.Model):
     batch2 = models.CharField(max_length=100, null=False)
     QC_state = models.CharField(max_length=100, null=False)
     QC_Bacteria = models.CharField(max_length=100, null=False)
-    QC_Bacteria_gg = models.CharField(max_length=100, null=False)
+    QC_KOs = models.CharField(max_length=100, null=False)
     QC_Fungi = models.CharField(max_length=100, null=False)
 
     class Meta:
@@ -112,11 +115,13 @@ class Searchable(models.Model):
 
 class taxa2ncbi(models.Model):
     hgmt_micro_id = models.CharField(max_length=100, null=False)
+    assay_type = models.CharField(max_length=10, null=False)
     level = models.CharField(max_length=100, null=False)
     taxa = models.CharField(max_length=300, null=False)
     short_name = models.CharField(max_length=100, null=False)
     taxid = models.CharField(max_length=100, null=False)
     scientific_name = models.CharField(max_length=300, null=False)
+    scientific_short_name = models.CharField(max_length=100, null=False)
 
     class Meta:
         db_table = "taxa2ncbi"
@@ -138,3 +143,33 @@ class FeatureTableBac(models.Model):
 
     class Meta:
         db_table = "feature_table_bac"
+
+class FeatureTableKOs(models.Model):
+    ko = models.CharField(max_length=500, null=False)
+    run_id = models.CharField(max_length=100, null=False)
+    abundance = models.FloatField(null=False)
+
+    class Meta:
+        db_table = "feature_table_kos"
+
+class GMTD(models.Model):
+    label = models.CharField(max_length=10, null=False)
+    short_name = models.CharField(max_length=100, null=False)
+    case = models.CharField(max_length=100, null=False) 
+    group = models.CharField(max_length=100, null=False)
+    score = models.FloatField(null=False)
+    nproject = models.IntegerField(null=False)
+
+    class Meta:
+        db_table = "gmtd"
+
+class GMTP(models.Model):
+    label = models.CharField(max_length=10, null=False)
+    short_name = models.CharField(max_length=100, null=False)
+    case = models.CharField(max_length=100, null=False) 
+    group = models.CharField(max_length=100, null=False)
+    score = models.FloatField(null=False)
+    nproject = models.IntegerField(null=False)
+
+    class Meta:
+        db_table = "gmtp"
